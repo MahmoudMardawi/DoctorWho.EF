@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DoctorWho.Db.Domain
 {
-    internal class EpisodeView
+    public class EpisodeView
     {
         public int? Series_Number { get; set; }
         public int? Episode_Number { get; set; }
