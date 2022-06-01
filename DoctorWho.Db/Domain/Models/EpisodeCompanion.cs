@@ -7,17 +7,15 @@ using System.Threading.Tasks;
 
 namespace DoctorWho.Db.Domain.Models
 {
-    internal class EpisodeCompanion
+    public class EpisodeCompanion
     {
 
         public int EpisodeCompanionId { get; set; }
-        public int EpisodeId { get; set; }
 
-        [NotMapped]
         public Episode Episode { get; set; }
+        public int EpisodeId { get; set; }
+        public Companion Companion { get; set; }
         public int CompanionId { get; set; }
 
-        [NotMapped]
-        public Companion Companion { get; set; }
     }
 }

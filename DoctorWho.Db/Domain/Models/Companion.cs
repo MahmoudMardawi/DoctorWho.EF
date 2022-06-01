@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DoctorWho.Db.Domain.Models
 {
-    internal class Companion
+    public class Companion
     {
         public Companion()
         {
-            this.EpisodeCompanion = new List<EpisodeCompanion>();
+            this.EpisodeCompanions = new List<EpisodeCompanion>();
         }
         public Companion(string CompanionName, string WhoPlayed) : this()
         {
@@ -20,6 +20,6 @@ namespace DoctorWho.Db.Domain.Models
         public int CompanionId { get; set; }
         public string CompanionName { get; set; }
         public string WhoPlayed { get; set; }
-        public List<EpisodeCompanion> EpisodeCompanion { get; set; }
+        public List<EpisodeCompanion> EpisodeCompanions { get; set; }
     }
 }
