@@ -33,6 +33,12 @@ Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate
             modelBuilder.Entity<Author>().HasKey(a => a.AuthorId);
             modelBuilder.Entity<Author>().Property(a => a.AuthorName).IsRequired();
             modelBuilder.Entity<Author>().Property(a => a.AuthorName).HasMaxLength(350);
+            modelBuilder.Entity<Doctor>().HasData(
+            new Doctor {DoctorId=1,  DoctorNumber = 123, DoctorName = "Jack Rocheld", BirthDate = new DateTime(1954, 03, 25), FirstEpisodeDate = new DateTime(1994, 12, 21), LastEpisodeDate = new DateTime(1995, 02, 01) },
+                new Doctor { DoctorId = 2, DoctorNumber = 234, DoctorName = "Alesandro", BirthDate = new DateTime(1960, 11, 17), FirstEpisodeDate = new DateTime(1990, 12, 22), LastEpisodeDate = new DateTime(1991, 07, 22) },
+                new Doctor { DoctorId = 3, DoctorNumber = 345, DoctorName = "Gabriel", BirthDate = new DateTime(1967, 06, 21), FirstEpisodeDate = new DateTime(2000, 05, 09), LastEpisodeDate = new DateTime(2001, 10, 11) },
+                new Doctor { DoctorId = 4, DoctorNumber = 456, DoctorName = "Steven", BirthDate = new DateTime(1970, 08, 28), FirstEpisodeDate = new DateTime(2002, 07, 30), LastEpisodeDate = new DateTime(2003, 12, 12) },
+                new Doctor { DoctorId = 5, DoctorNumber = 567, DoctorName = "Frank", BirthDate = new DateTime(1965, 12, 13), FirstEpisodeDate = new DateTime(1993, 09, 14), LastEpisodeDate = new DateTime(1994, 01, 04) });
 
 
             modelBuilder.Entity<Companion>().HasKey(c => c.CompanionId);
@@ -40,6 +46,7 @@ Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate
             modelBuilder.Entity<Companion>().Property(c => c.CompanionName).HasMaxLength(350);
             modelBuilder.Entity<Companion>().Property(c => c.WhoPlayed).IsRequired();
             modelBuilder.Entity<Companion>().Property(c => c.WhoPlayed).HasMaxLength(350);
+            modelBuilder.Entity<Companion>().HasData({ });
 
 
             modelBuilder.Entity<Doctor>().HasKey(d => d.DoctorId);
