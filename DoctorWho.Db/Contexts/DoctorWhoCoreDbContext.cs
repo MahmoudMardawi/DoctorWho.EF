@@ -16,11 +16,18 @@ namespace DoctorWho.Db.Contexts
         public Microsoft.EntityFrameworkCore.DbSet<Companion> Companions { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<Doctor> Doctors { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<Enemy> Enemies { get; set; }
+        public Microsoft.EntityFrameworkCore.DbSet<ThreeMostFrequentlyAppearingCompanions> ThreeMostFrequentlyAppearingCompanions { get; set; }
+        public Microsoft.EntityFrameworkCore.DbSet<ThreeMostFrequentlyAppearingEnemies> ThreeMostFrequenlyAppearingEnemies { get; set; }
+
+        internal object Execute_fnEnemies(int EpisodeId) => throw new NotImplementedException();
+        
+        public string Execute_fnCompanions(int EpisodeId) => throw new NotSupportedException();
+
+
         public Microsoft.EntityFrameworkCore.DbSet<Episode> Episodes { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<EpisodeCompanion> EpisodeCompanions { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<EpisodeEnemy> EpisodeEnemies { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<EpisodeView> EpisodeViews { get; set; }
-
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder) => dbContextOptionsBuilder.
@@ -149,13 +156,13 @@ Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate
                         .HasOne(ce => ce.Episode)
                         .WithMany(e => e.EpisodeCompanions)
                         .HasForeignKey(ce => ce.EpisodeId);
-            //modelBuilder.Entity<EpisodeCompanion>().HasData(
-            //   new EpisodeCompanion { EpisodeCompanionId = 1, EpisodeId = 2, CompanionId = 3 },
-            //   new EpisodeCompanion { EpisodeCompanionId = 2, EpisodeId = 1, CompanionId = 2 },
-            //   new EpisodeCompanion { EpisodeCompanionId = 3, EpisodeId = 3, CompanionId = 2 },
-            //   new EpisodeCompanion { EpisodeCompanionId = 4, EpisodeId = 1, CompanionId = 4 },
-            //   new EpisodeCompanion { EpisodeCompanionId = 5, EpisodeId = 5, CompanionId = 5 }
-            //   );
+            modelBuilder.Entity<EpisodeCompanion>().HasData(
+               new EpisodeCompanion { EpisodeCompanionId = 1, EpisodeId = 2, CompanionId = 3 },
+               new EpisodeCompanion { EpisodeCompanionId = 2, EpisodeId = 1, CompanionId = 2 },
+               new EpisodeCompanion { EpisodeCompanionId = 3, EpisodeId = 3, CompanionId = 2 },
+               new EpisodeCompanion { EpisodeCompanionId = 4, EpisodeId = 1, CompanionId = 4 },
+               new EpisodeCompanion { EpisodeCompanionId = 5, EpisodeId = 5, CompanionId = 5 }
+               );
 
             //EpisodeEnemy Table
             modelBuilder.Entity<EpisodeEnemy>().HasKey(ee => ee.EpisodeEnemyId);
@@ -171,9 +178,17 @@ Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate
                 new EpisodeEnemy { EpisodeEnemyId = 5, EpisodeId = 4, EnemyId = 1 }
                 );
 
-             modelBuilder.Entity<EpisodeView>().HasNoKey().ToView("viewEpisodes");
+            modelBuilder.Entity<ThreeMostFrequentlyAppearingCompanions>().HasNoKey();
+            modelBuilder.Entity<ThreeMostFrequentlyAppearingEnemies>().HasNoKey();
+
+            modelBuilder.Entity<EpisodeView>().HasNoKey().ToView("viewEpisodes");
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.HasDbFunction(typeof(DoctorWhoCoreDbContext).GetMethod(nameof(Execute_fnCompanions), new[] { typeof(int) }))
+                .HasName("fnCompanions");
+
+            modelBuilder.HasDbFunction(typeof(DoctorWhoCoreDbContext).GetMethod(nameof(Execute_fnEnemies), new[] { typeof(int) }))
+                .HasName("fnEnemies");
 
             //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             //{
