@@ -40,7 +40,7 @@ namespace DoctorWho.Db.Repositoris
         public static Companion GetCompanionById(int CompanionId)
         {
             var companion = DoctorWhoCoreDbContext._context.Companions.Find(CompanionId);
-            return companion != null ? companion : throw new NullReferenceException("No companions with the provided Id exist in the database!");
+            return companion != null ? companion : throw new NullReferenceException("No companions with this Id in the table!");
         }
     }
 }
