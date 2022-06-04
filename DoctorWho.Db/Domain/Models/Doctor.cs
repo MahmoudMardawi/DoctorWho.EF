@@ -13,14 +13,14 @@ namespace DoctorWho.Db.Domain.Models
             this.Episodes = new List<Episode>();
         }
 
-        public Doctor(int doctorId, int doctorNumber, string doctorName, DateTime? birthDate, DateTime? firstEpisodeDate, DateTime? lastEpisodeDate)
+        public Doctor(int DoctorId, int DoctorNumber, string DoctorName, DateTime? BirthDate, DateTime? FirstEpisodeDate, DateTime? LastEpisodeDate):this()
         {
-            DoctorId = doctorId;
-            DoctorNumber = doctorNumber;
-            DoctorName = doctorName;
-            BirthDate = birthDate;
-            FirstEpisodeDate = firstEpisodeDate;
-            LastEpisodeDate = lastEpisodeDate;
+            this.DoctorId = DoctorId;
+            this.DoctorNumber = DoctorNumber;
+            this.DoctorName = DoctorName;
+            this.BirthDate = BirthDate;
+            this.FirstEpisodeDate = FirstEpisodeDate;
+            this.LastEpisodeDate = LastEpisodeDate;
         }
 
         public int DoctorId { get; set; }
