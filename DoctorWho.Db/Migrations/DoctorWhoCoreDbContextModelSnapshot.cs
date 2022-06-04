@@ -418,6 +418,38 @@ namespace DoctorWho.Db.Migrations
                     b.HasIndex("EpisodeId");
 
                     b.ToTable("EpisodeCompanions");
+
+                    b.HasData(
+                        new
+                        {
+                            EpisodeCompanionId = 1,
+                            CompanionId = 3,
+                            EpisodeId = 2
+                        },
+                        new
+                        {
+                            EpisodeCompanionId = 2,
+                            CompanionId = 2,
+                            EpisodeId = 1
+                        },
+                        new
+                        {
+                            EpisodeCompanionId = 3,
+                            CompanionId = 2,
+                            EpisodeId = 3
+                        },
+                        new
+                        {
+                            EpisodeCompanionId = 4,
+                            CompanionId = 4,
+                            EpisodeId = 1
+                        },
+                        new
+                        {
+                            EpisodeCompanionId = 5,
+                            CompanionId = 5,
+                            EpisodeId = 5
+                        });
                 });
 
             modelBuilder.Entity("DoctorWho.Db.Domain.Models.EpisodeEnemy", b =>
@@ -473,6 +505,24 @@ namespace DoctorWho.Db.Migrations
                             EnemyId = 1,
                             EpisodeId = 4
                         });
+                });
+
+            modelBuilder.Entity("DoctorWho.Db.Domain.Models.ThreeMostFrequentlyAppearingCompanions", b =>
+                {
+                    b.Property<string>("_ThreeMostFrequentlyAppearingCompanions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("ThreeMostFrequentlyAppearingCompanions");
+                });
+
+            modelBuilder.Entity("DoctorWho.Db.Domain.Models.ThreeMostFrequentlyAppearingEnemies", b =>
+                {
+                    b.Property<string>("_ThreeMostFrequentlyAppearingEnemies")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("ThreeMostFrequenlyAppearingEnemies");
                 });
 
             modelBuilder.Entity("DoctorWho.Db.Domain.Models.Episode", b =>
