@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using DoctorWho.Db.Repositoris;
+using System.Reflection;
 
 namespace DoctorWho.Db.Contexts
 {
@@ -15,19 +17,15 @@ namespace DoctorWho.Db.Contexts
         public Microsoft.EntityFrameworkCore.DbSet<Author> Authors { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<Companion> Companions { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<Doctor> Doctors { get; set; }
-        public Microsoft.EntityFrameworkCore.DbSet<Enemy> Enemies { get; set; }
-        public Microsoft.EntityFrameworkCore.DbSet<ThreeMostFrequentlyAppearingCompanions> ThreeMostFrequentlyAppearingCompanions { get; set; }
-        public Microsoft.EntityFrameworkCore.DbSet<ThreeMostFrequentlyAppearingEnemies> ThreeMostFrequenlyAppearingEnemies { get; set; }
-
-        internal object Execute_fnEnemies(int EpisodeId) => throw new NotImplementedException();
-        
-        public string Execute_fnCompanions(int EpisodeId) => throw new NotSupportedException();
-
-
+        public Microsoft.EntityFrameworkCore.DbSet<Enemy> Enemies { get; set; }  
         public Microsoft.EntityFrameworkCore.DbSet<Episode> Episodes { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<EpisodeCompanion> EpisodeCompanions { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<EpisodeEnemy> EpisodeEnemies { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<EpisodeView> EpisodeViews { get; set; }
+        public string Execute_fnEnemies(int EpisodeId) => throw new NotImplementedException();
+        public string Execute_fnCompanions(int EpisodeId) => throw new NotSupportedException();
+        public Microsoft.EntityFrameworkCore.DbSet<ThreeMostFrequentlyAppearingCompanions> ThreeMostFrequentlyAppearingCompanions { get; set; }
+        public Microsoft.EntityFrameworkCore.DbSet<ThreeMostFrequentlyAppearingEnemies> ThreeMostFrequenlyAppearingEnemies { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder) => dbContextOptionsBuilder.
@@ -38,6 +36,7 @@ Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Author Table
+
             modelBuilder.Entity<Author>().HasKey(a => a.AuthorId);
             modelBuilder.Entity<Author>().Property(a => a.AuthorName).IsRequired();
             modelBuilder.Entity<Author>().Property(a => a.AuthorName).HasMaxLength(350);
@@ -49,6 +48,7 @@ Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate
                new Author { AuthorId = 5, AuthorName = "Fredrick" });
 
             //Companion Table
+
             modelBuilder.Entity<Companion>().HasKey(c => c.CompanionId);
             modelBuilder.Entity<Companion>().Property(c => c.CompanionName).IsRequired();
             modelBuilder.Entity<Companion>().Property(c => c.CompanionName).HasMaxLength(350);
@@ -77,6 +77,7 @@ Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate
                 new Doctor { DoctorId = 5, DoctorNumber = 567, DoctorName = "Frank", BirthDate = new DateTime(1965, 12, 13), FirstEpisodeDate = new DateTime(1993, 09, 14), LastEpisodeDate = new DateTime(1994, 01, 04) });
 
             //Enemy Table
+
             modelBuilder.Entity<Enemy>().HasKey(e => e.EnemyId);
             modelBuilder.Entity<Enemy>().Property(e => e.EnemyName).IsRequired();
             modelBuilder.Entity<Enemy>().Property(e => e.EnemyName).HasMaxLength(350);
@@ -184,16 +185,13 @@ Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate
             modelBuilder.Entity<EpisodeView>().HasNoKey().ToView("viewEpisodes");
             base.OnModelCreating(modelBuilder);
 
+            
             modelBuilder.HasDbFunction(typeof(DoctorWhoCoreDbContext).GetMethod(nameof(Execute_fnCompanions), new[] { typeof(int) }))
                 .HasName("fnCompanions");
-
             modelBuilder.HasDbFunction(typeof(DoctorWhoCoreDbContext).GetMethod(nameof(Execute_fnEnemies), new[] { typeof(int) }))
                 .HasName("fnEnemies");
-
-            //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            //{
-            //    relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            //}
         }
+
+      
     }
 }
