@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,5 +31,10 @@ namespace DoctorWho.Db.Domain.Models
         public DateTime? FirstEpisodeDate { get; set; }
         public DateTime? LastEpisodeDate { get; set; }
         public List<Episode> Episodes { get; }
+
+        public static implicit operator DbSet<object>(Doctor v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

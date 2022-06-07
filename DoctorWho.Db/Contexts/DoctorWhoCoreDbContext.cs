@@ -14,6 +14,15 @@ namespace DoctorWho.Db.Contexts
 
 
         public static DoctorWhoCoreDbContext _context = new DoctorWhoCoreDbContext();
+
+        public DoctorWhoCoreDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        public DoctorWhoCoreDbContext()
+        {
+        }
+
         public Microsoft.EntityFrameworkCore.DbSet<Author> Authors { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<Companion> Companions { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<Doctor> Doctors { get; set; }
@@ -27,12 +36,16 @@ namespace DoctorWho.Db.Contexts
         public Microsoft.EntityFrameworkCore.DbSet<ThreeMostFrequentlyAppearingCompanions> ThreeMostFrequentlyAppearingCompanions { get; set; }
         public Microsoft.EntityFrameworkCore.DbSet<ThreeMostFrequentlyAppearingEnemies> ThreeMostFrequenlyAppearingEnemies { get; set; }
 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder) => dbContextOptionsBuilder.
-     UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DoctorWhoCore;
-Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
-            .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
-                .EnableSensitiveDataLogging(true);
+        protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
+        {
+            if (!dbContextOptionsBuilder.IsConfigured)
+            {
+                dbContextOptionsBuilder.
+         UseSqlServer(@"Data Source=SPECTRUM\SQLEXPRESS;Initial Catalog=DoctorWhoCore;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
+                .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
+                    .EnableSensitiveDataLogging(true);
+            }
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Author Table
