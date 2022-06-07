@@ -830,3 +830,5 @@ coverage*[.json, .xml, .info]
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/vs,visualstudio,csharp,dotnetcore,rider
+/DoctorWho/appsettings.Development.json
+/DoctorWho/appsettings.json
