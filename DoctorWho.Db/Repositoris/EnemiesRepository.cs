@@ -1,27 +1,31 @@
 ﻿using DoctorWho.Db.Contexts;
 using DoctorWho.Db.Domain.Models;
+using DoctorWho.Db.Repositoris.IReposetories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YamlDotNet.Core;
 
 namespace DoctorWho.Db.Repositoris
 {
-    public class EnemiesRepository
+    public class EnemiesRepository : IEnemiesRepository
     {
-        public static void Create(string EnemyName, string Description)
+        public Enemy Create(string EnemyName, string Description)
         {
             if (EnemyName == null) throw new ArgumentNullException("EnemyName must not be null!");
-            DoctorWhoCoreDbContext._context.Enemies.Add(new Enemy(EnemyName, Description));
+            var NewEnemy = new Enemy(EnemyName, Description);
+            DoctorWhoCoreDbContext._context.Enemies.Add(NewEnemy);
             DoctorWhoCoreDbContext._context.SaveChanges();
+            return NewEnemy;
         }
-        public static void Update()
+        public void Update()
         {
             DoctorWhoCoreDbContext._context.ChangeTracker.DetectChanges();
             DoctorWhoCoreDbContext._context.SaveChanges();
         }
-        public static void Delete(Enemy Enemy)
+        public void Delete(Enemy Enemy)
         {
             if (Enemy == null) throw new ArgumentNullException("There is not Enemy in the Enemies table");
             try
@@ -34,7 +38,7 @@ namespace DoctorWho.Db.Repositoris
                 throw new Exception(ex.Message);
             }
         }
-        public static Enemy GetEnemyById(int EnemyId)
+        public Enemy GetEnemyById(int EnemyId)
         {
             var enemy = DoctorWhoCoreDbContext._context.Enemies.Find(EnemyId);
             return enemy != null ? enemy : throw new NullReferenceException("No enemies with the provided Id exist in the database!");

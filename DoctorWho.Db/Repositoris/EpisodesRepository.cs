@@ -5,23 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using DoctorWho.Db.Domain.Models;
 using DoctorWho.Db.Contexts;
+using DoctorWho.Db.Repositoris.IReposetories;
 
 namespace DoctorWho.Db.Repositoris
 {
-    public class EpisodesRepository
+    public class EpisodesRepository : IEpisodesRepository
     {
-        public static void Create(int DoctorId, int? SeriesNumber, int? EpisodeNumber, string EpisodeType, string Title, DateTime? EpisodeDate, int AuthorId,  string Notes)
+        public Episode Create(int DoctorId, int? SeriesNumber, int? EpisodeNumber, string EpisodeType, string Title, DateTime? EpisodeDate, int AuthorId,  string Notes)
         {
             if (Title == null) throw new ArgumentNullException("Cannot create an Episode with a null Title!");
-            DoctorWhoCoreDbContext._context.Episodes.Add(new Episode(DoctorId, SeriesNumber, EpisodeNumber, EpisodeType, Title, EpisodeDate, AuthorId,  Notes));
+            var NewEpisode = new Episode(DoctorId, SeriesNumber, EpisodeNumber, EpisodeType, Title, EpisodeDate, AuthorId, Notes);
+            DoctorWhoCoreDbContext._context.Episodes.Add(NewEpisode);
             DoctorWhoCoreDbContext._context.SaveChanges();
+            return NewEpisode;
         }
-        public static void Update()
+        public void Update()
         {
             DoctorWhoCoreDbContext._context.ChangeTracker.DetectChanges();
             DoctorWhoCoreDbContext._context.SaveChanges();
+            
         }
-        public static void Delete(Episode Episode)
+        public void Delete(Episode Episode)
         {
             if (Episode == null) throw new ArgumentNullException("Cannot remove a null Episode from the Episodes table");
             try

@@ -1,5 +1,6 @@
 ﻿using DoctorWho.Db.Contexts;
 using DoctorWho.Db.Domain.Models;
+using DoctorWho.Db.Repositoris.IReposetories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,23 +9,23 @@ using System.Threading.Tasks;
 
 namespace DoctorWho.Db.Repositoris
 {
-    public class CompanionsRepository
+    public class CompanionsRepository : ICompanionRepository
     {
-        public static void Create(string CompanionName, string WhoPlayed)
+        public void Create(string CompanionName, string WhoPlayed)
         {
             if (CompanionName == null || WhoPlayed == null)
                 throw new ArgumentNullException("Cannot create a Companion with a null CompanionName or a null WhoPlayed!");
             DoctorWhoCoreDbContext._context.Companions.Add(new Companion(CompanionName, WhoPlayed));
             DoctorWhoCoreDbContext._context.SaveChanges();
         }
-        public static void Update(Companion Companion)
+        public void Update(Companion Companion)
         {
             if (Companion == null) throw new ArgumentNullException("Comppanion table is empty!");
 
             DoctorWhoCoreDbContext._context.ChangeTracker.DetectChanges();
             DoctorWhoCoreDbContext._context.SaveChanges();
         }
-        public static void Delete(Companion Companion)
+        public void Delete(Companion Companion)
         {
             if (Companion == null) throw new ArgumentNullException("Comppanion table is empty!");
             try
@@ -37,7 +38,7 @@ namespace DoctorWho.Db.Repositoris
                 throw new Exception(ex.Message);
             }
         }
-        public static Companion GetCompanionById(int CompanionId)
+        public Companion GetCompanionById(int CompanionId)
         {
             var companion = DoctorWhoCoreDbContext._context.Companions.Find(CompanionId);
             return companion != null ? companion : throw new NullReferenceException("No companions with this Id in the table!");
