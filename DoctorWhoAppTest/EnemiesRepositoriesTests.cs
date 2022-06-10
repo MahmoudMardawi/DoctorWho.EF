@@ -1,47 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DoctorWho.Db.Contexts;
+﻿using DoctorWho.Db.Domain.Models;
 using DoctorWho.Db.Repositoris;
 using DoctorWho.Db.Repositoris.IReposetories;
-using FluentAssertions;
 using Moq;
-using Xunit;
 
 
 namespace DoctorWhoAppTest
 {
     [TestClass]
+
     public class EnemiesRepositoriesTests
     {
 
-        private readonly Mock<IEnemiesRepository> IenemiesRepository;
-        private readonly EnemiesRepository enemiesRepository;
+        private readonly Mock<IGenericRepository<Enemy>> IenemiesRepository;
+        private readonly EnemiesRepository<Enemy> enemiesRepository;
         public EnemiesRepositoriesTests()
         {
-            enemiesRepository = new EnemiesRepository();
-            IenemiesRepository = new Mock<IEnemiesRepository>();
+            enemiesRepository = new EnemiesRepository<Enemy>();
+            IenemiesRepository = new Mock<IGenericRepository<Enemy>>();
         }
-
+ 
         [TestMethod]
         public void ShouldAddEnemyToDb()
         {
-            IenemiesRepository.Setup(e => e.Create("Alonso", null)).Returns(new DoctorWho.Db.Domain.Models.Enemy("Alonso", null));
-            var result = enemiesRepository.Create("Alonso", null);
-            Assert.AreEqual("Alonso", result.EnemyName);
-            Assert.AreEqual(null, result.Description);
+            var NewEnemy = new Enemy
+            {
+
+                EnemyName = "Alonso",
+                Description = null
+            };
+            IenemiesRepository.Setup(e => e.Create(NewEnemy)).Returns(new Enemy(NewEnemy));
+            var result = enemiesRepository.Create(NewEnemy);
+            Assert.AreEqual(NewEnemy.EnemyName, result.EnemyName);
 
         }
 
         [TestMethod]
         public void ShouldGetEnemyById()
         {
-            IenemiesRepository.Setup(i => i.GetEnemyById(1)).Returns(new DoctorWho.Db.Domain.Models.Enemy("Alonso", null));
-            var result = enemiesRepository.GetEnemyById(1);
-            //result.Should().Be("Alonso");
-            Assert.AreEqual("Alonso", result.EnemyName);
+            var NewEnemy = new Enemy
+            {
+                EnemyId = 7,
+                EnemyName = "Alonso",
+                Description = null
+            };
+
+            IenemiesRepository.Setup(i => i.GetRecordyById(NewEnemy)).Returns(NewEnemy);
+            var result = enemiesRepository.GetRecordyById(NewEnemy);
+            Assert.AreEqual(NewEnemy.EnemyName, result.EnemyName);
 
         }
 
