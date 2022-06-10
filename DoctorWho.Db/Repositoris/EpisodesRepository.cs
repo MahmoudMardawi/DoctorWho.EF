@@ -9,23 +9,33 @@ using DoctorWho.Db.Repositoris.IReposetories;
 
 namespace DoctorWho.Db.Repositoris
 {
-    public class EpisodesRepository : IEpisodesRepository
+    public class EpisodesRepository<T> : IGenericRepository<Episode>
     {
-        public Episode Create(int DoctorId, int? SeriesNumber, int? EpisodeNumber, string EpisodeType, string Title, DateTime? EpisodeDate, int AuthorId,  string Notes)
+        public Episode Create(Episode episode)
         {
-            if (Title == null) throw new ArgumentNullException("Cannot create an Episode with a null Title!");
-            var NewEpisode = new Episode(DoctorId, SeriesNumber, EpisodeNumber, EpisodeType, Title, EpisodeDate, AuthorId, Notes);
+            if (episode.Title == null) throw new ArgumentNullException("Cannot create an Episode with a null Title!");
+            var NewEpisode = new Episode
+            {
+                DoctorId = episode.DoctorId,
+                SeriesNumber = episode.SeriesNumber,
+                EpisodeNumber = episode.EpisodeNumber,
+                EpisodeType = episode.EpisodeType,
+                Title = episode.Title,
+                EpisodeDate = episode.EpisodeDate,
+                AuthorId = episode.AuthorId,
+                Notes = episode.Notes
+            };
             DoctorWhoCoreDbContext._context.Episodes.Add(NewEpisode);
             DoctorWhoCoreDbContext._context.SaveChanges();
             return NewEpisode;
         }
-        public void Update()
+        public Episode Update(Episode episode)
         {
-            DoctorWhoCoreDbContext._context.ChangeTracker.DetectChanges();
+            if (episode == null) throw new ArgumentNullException("Enemy table is empty!");
             DoctorWhoCoreDbContext._context.SaveChanges();
-            
+            return episode;
         }
-        public void Delete(Episode Episode)
+        public Episode Delete(Episode Episode)
         {
             if (Episode == null) throw new ArgumentNullException("Cannot remove a null Episode from the Episodes table");
             try
@@ -37,6 +47,17 @@ namespace DoctorWho.Db.Repositoris
             {
                 throw new Exception(ex.Message);
             }
+            return Episode;
+        }
+        public List<Episode> GetAllRecords()
+        {
+            return DoctorWhoCoreDbContext._context.Episodes.ToList();
+
+        }
+        public Episode GetRecordyById(Episode TId)
+        {
+            var episode = DoctorWhoCoreDbContext._context.Episodes.Find(TId.EpisodeId);
+            return episode != null ? episode : throw new NullReferenceException("No companions with this Id in the table!");
         }
 
     }

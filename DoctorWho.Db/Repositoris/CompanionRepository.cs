@@ -9,23 +9,24 @@ using System.Threading.Tasks;
 
 namespace DoctorWho.Db.Repositoris
 {
-    public class CompanionsRepository : ICompanionRepository
+    public class CompanionsRepository<T> : IGenericRepository<Companion>
     {
-        public void Create(string CompanionName, string WhoPlayed)
+        public Companion Create(Companion companion)
         {
-            if (CompanionName == null || WhoPlayed == null)
+            if (companion.CompanionName == null || companion.WhoPlayed == null)
                 throw new ArgumentNullException("Cannot create a Companion with a null CompanionName or a null WhoPlayed!");
-            DoctorWhoCoreDbContext._context.Companions.Add(new Companion(CompanionName, WhoPlayed));
+            var NewCompanion = new Companion { CompanionName = companion.CompanionName, WhoPlayed = companion.WhoPlayed };
+            DoctorWhoCoreDbContext._context.Companions.Add(NewCompanion);
             DoctorWhoCoreDbContext._context.SaveChanges();
+            return NewCompanion;
         }
-        public void Update(Companion Companion)
+        public Companion Update(Companion Companion)
         {
             if (Companion == null) throw new ArgumentNullException("Comppanion table is empty!");
-
-            DoctorWhoCoreDbContext._context.ChangeTracker.DetectChanges();
-            DoctorWhoCoreDbContext._context.SaveChanges();
+             DoctorWhoCoreDbContext._context.SaveChanges();
+            return Companion;
         }
-        public void Delete(Companion Companion)
+        public Companion Delete(Companion Companion)
         {
             if (Companion == null) throw new ArgumentNullException("Comppanion table is empty!");
             try
@@ -37,10 +38,17 @@ namespace DoctorWho.Db.Repositoris
             {
                 throw new Exception(ex.Message);
             }
+            return Companion;
         }
-        public Companion GetCompanionById(int CompanionId)
+        public List<Companion> GetAllRecords()
         {
-            var companion = DoctorWhoCoreDbContext._context.Companions.Find(CompanionId);
+            return DoctorWhoCoreDbContext._context.Companions.ToList();
+
+        }
+
+        public Companion GetRecordyById(Companion TId)
+        {
+            var companion = DoctorWhoCoreDbContext._context.Companions.Find(TId.CompanionId);
             return companion != null ? companion : throw new NullReferenceException("No companions with this Id in the table!");
         }
     }

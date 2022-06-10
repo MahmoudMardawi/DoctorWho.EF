@@ -9,33 +9,46 @@ using DoctorWho.Db.Repositoris.IReposetories;
 
 namespace DoctorWho.Db.Repositoris
 {
-    public class AuthorRepository : IAuthorRepository
+    public class AuthorRepository<T> : IGenericRepository<Author> 
     {
-      
-            public void Create(string AuthorName)
+
+            public Author Create(Author tValue)
             {
-                if (AuthorName == null) throw new ArgumentNullException("Author name cannot be null!");
-                DoctorWhoCoreDbContext._context.Authors.Add(new Author(AuthorName));
+                if (tValue == null) throw new ArgumentNullException("Author name cannot be null!");
+                DoctorWhoCoreDbContext._context.Authors.Add(new Author { AuthorName = tValue.AuthorName });
                 DoctorWhoCoreDbContext._context.SaveChanges();
+            return tValue;
             }
-            public void Update(Author Author)
+            public Author Update(Author tValue)
             {
-                if (Author == null) throw new ArgumentNullException("Author table is empty");
-                DoctorWhoCoreDbContext._context.ChangeTracker.DetectChanges();
+                if (tValue == null) throw new ArgumentNullException("Author table is empty");
                 DoctorWhoCoreDbContext._context.SaveChanges();
+                  return (Author)tValue;
             }
-            public void Delete(Author Author)
+            public Author Delete(Author tValue)
             {
-                if (Author == null) throw new ArgumentNullException("Author table is empty");
+                if (tValue == null) throw new ArgumentNullException("Author table is empty");
                 try
                 {
-                    DoctorWhoCoreDbContext._context.Authors.Remove(Author);
+                    DoctorWhoCoreDbContext._context.Authors.Remove(tValue);
                     DoctorWhoCoreDbContext._context.SaveChanges();
                 }
                 catch (Exception ex)
                 {
                     throw new Exception(ex.Message);
                 }
+            return tValue;
             }
+        public List<Author> GetAllRecords()
+        {
+            return DoctorWhoCoreDbContext._context.Authors.ToList();
+        }
+        public Author GetRecordyById(Author TId) 
+        {
+            var author = DoctorWhoCoreDbContext._context.Authors.Find(TId.AuthorId);
+            return author != null ? author : throw new NullReferenceException("No companions with this Id in the table!");
+
+        }
+
     }
 }
