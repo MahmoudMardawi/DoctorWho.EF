@@ -17,12 +17,9 @@ namespace DoctorWhoAppTest
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
-                var author = new Author { AuthorName ="a" };
+                var author = new Author { AuthorName ="b" };
                 context.Authors.Add(author);
-                //Debug.WriteLine($"Before save: {author.AuthorId}");
                 context.SaveChanges();
-                //Debug.WriteLine($"After save: {author.AuthorId}");
-
                 Assert.AreNotEqual(0, author.AuthorId);
             }
         }
@@ -37,7 +34,7 @@ namespace DoctorWhoAppTest
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
-                var doctor = new Doctor { DoctorName="a" };
+                var doctor = new Doctor { DoctorName="b" };
                 context.Doctors.Add(doctor);
                 context.SaveChanges();
 
@@ -49,19 +46,19 @@ namespace DoctorWhoAppTest
         public void CanInsertCompanionIntoDatabase()
         {
             var builder = new DbContextOptionsBuilder<DoctorWhoCoreDbContext>();
-            builder.UseSqlServer(@"Data Source=SPECTRUM\SQLEXPRESS;Initial Catalog=DoctorWhoCore;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            builder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DoctorWhoCore;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
 
             using (var context = new DoctorWhoCoreDbContext(builder.Options))
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
-                var companion = new Companion { CompanionName = "a" , WhoPlayed="Fred"};
+                var companion = new Companion { CompanionName = "b" , WhoPlayed="s"};
                 context.Companions.Add(companion);
                 context.SaveChanges();
 
                 Assert.AreNotEqual(0, companion.CompanionId);
             }
+            
         }
-
     }
 }
