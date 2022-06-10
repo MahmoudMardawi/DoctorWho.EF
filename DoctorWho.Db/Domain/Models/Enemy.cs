@@ -14,10 +14,8 @@ namespace DoctorWho.Db.Domain.Models
             this.EpisodeEnemies = new List<EpisodeEnemy>();
         }
 
-        public Enemy(string EnemyName, string Description) : this()
+        public Enemy(Enemy newEnemy)
         {
-            this.EnemyName = EnemyName;
-            this.Description = Description;
         }
 
         public int EnemyId { get; set; }
