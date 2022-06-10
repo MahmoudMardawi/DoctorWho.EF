@@ -10,7 +10,7 @@ namespace DoctorWho.Db.Repositoris.IReposetories
     {
         public void Execute_fnCompanions(int EpisodeId);
         public void Execute_fnEnemies(int EpisodeId);
-        public void Execute_viewEpisodes();
+        public List<Domain.EpisodeView> Execute_viewEpisodes();
         public void Execute_spSummariseEpisodes();
 
     }

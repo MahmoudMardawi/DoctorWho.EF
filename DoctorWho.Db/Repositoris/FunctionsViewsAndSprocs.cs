@@ -21,30 +21,20 @@ namespace DoctorWho.Db.Repositoris
             var enemies = DoctorWhoCoreDbContext._context.Enemies.Select(e => DoctorWhoCoreDbContext._context.Execute_fnEnemies(EpisodeId)).FirstOrDefault();
             Console.WriteLine(enemies);
         }
-        public void Execute_viewEpisodes()
+        public List<Domain.EpisodeView> Execute_viewEpisodes()
         {
             var viewResults = DoctorWhoCoreDbContext._context.EpisodeViews.ToList();
-
-            Console.WriteLine(String.Format("{0, 5}|{1, 5}|{2, 5}|{3, 5}",
-                   "Doctor_Name", "Author_Name", "Companions", "Enemies"));
             foreach (var result in viewResults)
             {
-                Console.WriteLine(String.Format("{0, 5}|{1, 5}|{2, 5}|{3, 5}",
-                     result.Doctor_Name, result.Author_Name, result.Companions, result.Enemies));
+                string s = String.Format("{0, 5}|{1, 5}|{2, 5}|{3, 5}",
+                     result.Doctor_Name, result.Author_Name, result.Companions, result.Enemies);
             }
+            return viewResults;
         }
         public void Execute_spSummariseEpisodes()
         {
-            var companions = DoctorWhoCoreDbContext._context.ThreeMostFrequentlyAppearingCompanions.FromSqlRaw("EXEC spSummariseEpisodeCompanions").ToList();
-            foreach (var companion in companions)
-            {
-                Console.WriteLine(companion._ThreeMostFrequentlyAppearingCompanions);
-            }
-            var enemies = DoctorWhoCoreDbContext._context.ThreeMostFrequenlyAppearingEnemies.FromSqlRaw("EXEC spSummariseEpisodeEnemies").ToList();
-            foreach (var enemy in enemies)
-            {
-                Console.WriteLine(enemy._ThreeMostFrequentlyAppearingEnemies);
-            }
+            var CompanionsEnemies = DoctorWhoCoreDbContext._context.ThreeMostFrequentlyAppearingCompanions.FromSqlRaw("EXEC spSummariseEpisodes").ToList();
+             
         }
 
     }
